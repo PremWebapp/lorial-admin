@@ -34,7 +34,7 @@ const Login = () => {
   }, [])
 
   useEffect(() => {
-    if (token) navigate("/dashbord");
+    if (token) navigate("/dashboard");
   }, [token])
 
   const handleInputChange = (e) => {

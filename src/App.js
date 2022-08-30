@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import React, { Suspense, useEffect  } from 'react'
+import { HashRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import PrivateRoute from './helper/privateRoute'
 import './scss/style.scss'
 
@@ -19,6 +19,7 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
+
   return (
     <HashRouter>
       <Suspense fallback={loading}>

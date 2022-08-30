@@ -10,7 +10,7 @@ const initialState = {
 }
 
 export const loginFun = createAsyncThunk(
-    'login/vendor',
+    'login/admin',
     async (bodydata) => {
         const data = await postApiWithoutToken(`${initialState.development}/admin/auth`, bodydata)
         return data
@@ -18,7 +18,7 @@ export const loginFun = createAsyncThunk(
 )
 
 export const logoutFun = createAsyncThunk(
-    'logout/vendor',
+    'logout/admin',
     async (bodydata) => {
         const data = await postApiWithoutToken(`${initialState.development}/vendor/auth/logout`, bodydata)
         return data

@@ -1,9 +1,19 @@
-import React from 'react'
+import React ,{useEffect} from 'react'
 import { CCard, CCardBody, CCardHeader, CCol, CProgress, CProgressBar, CRow } from '@coreui/react'
 import { DocsExample } from 'src/components'
-import { Table } from 'antd'
+import { Table, Switch } from 'antd'
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductFun } from 'src/redux/reducers/productReducer';
+import {Link} from 'react-router-dom'
+import htmlPerse from 'html-react-parser'
+
 
 const ProductList = () => {
+  const dispatch = useDispatch()
+
+  const {token} = useSelector(state => state.auth)
+  const { productList ,productLoading} = useSelector(state => state.product)
+
   const CompletedColumns = [
     {
       title: 'Logo',
@@ -12,6 +22,12 @@ const ProductList = () => {
       render: (text, record) => (
         <span>{(record.category_img ? <span> <img alt='Menu_image' src={record?.category_img} style={{ width: "30px", height: "30px", borderRadius: "25px" }} /> </span> : '')}</span>
       )
+    },
+    {
+      title: 'Vendor Name',
+      dataIndex: `first_name`,
+      key: 'first_name',
+
     },
     {
       title: 'Category Name',
@@ -29,7 +45,7 @@ const ProductList = () => {
       dataIndex: 'description',
       key: 'description',
       render: (text, record) => (
-        <span>{(record.description ? <span>{htmlPerse(record.description)} </span> : '')}</span>
+        <span>{(record.description ? <span>{htmlPerse(record.description)}</span> : '')}</span>
       )
     },
     {
@@ -54,7 +70,7 @@ const ProductList = () => {
       title: 'Permitted',
       dataIndex: 'isPermitted',
       key: 'isPermitted',
-      render: text => <span>{text === '0' ? 'No' : 'Yes'}</span>,
+      render: text => <span><Switch defaultChecked={text == '0' ? false : true}  /></span>,
     },
     {
       title: 'Action',
@@ -64,24 +80,29 @@ const ProductList = () => {
           <Link to='/dashbord/product/details' state={{ id: record.product_id }} >
             <i className="fa fa-eye p-2  rounded-circle " style={{ color: 'white', backgroundColor: '#1b6bcc' }} id={record.product_id} ></i>
           </Link>
-          <span className="p-2  rounded-circle "></span><i className="fa fa-trash p-2  rounded-circle pointer" style={{ color: 'red', backgroundColor: '#1b6bcc' }} onClick={() => handleDelete(record.product_id)} id={record.product_id} ></i></span>
+          <span className="p-2  rounded-circle "></span><i className="fa fa-trash p-2  rounded-circle pointer" style={{ color: 'white', backgroundColor: '#1b6bcc' }} onClick={() => handleDelete(record.product_id)} id={record.product_id} ></i></span>
       )
     },
-  ];
+  ]
+
+  useEffect(() => {
+    dispatch(getProductFun({ token }))
+// eslint-disable-next-line
+}, [])
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
             <strong>Product</strong> <small>List</small>
-              <Table dataSource={''} columns={CompletedColumns} pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['05', '10', '20', '30'] }} />
+            <Table loading={productLoading} dataSource={productList} columns={CompletedColumns} pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['05', '10', '20', '30'] }} />
           </CCardHeader>
         </CCard>
       </CCol>
 
 
 
-{/* 
+      {/* 
 
       <CCol xs={12}>
         <CCard className="mb-4">
